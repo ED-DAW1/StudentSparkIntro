@@ -1,10 +1,16 @@
 package daw.ed.spark;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 import static spark.Spark.get;
 import static spark.Spark.post;
+import spark.template.freemarker.FreeMarkerRoute;
+import spark.ModelAndView;
+
 
 public class App {
 
@@ -117,6 +123,20 @@ public class App {
                 String fruit = request.queryParams("fruit");
                 return String.format("<h1> Has elegido:  <em>%s</em> </h1>",
                         fruit);
+            }
+        });
+        
+        get(new FreeMarkerRoute("/freemarker/hello") {
+            @Override
+            public ModelAndView handle(Request request, Response response) {
+                Map<String, Object> data = new HashMap<>();
+                data.put("name","Fulanito"); 
+                data.put("numero",1);                 
+                data.put("colores",
+                        Arrays.asList("Rojo","Azul","Verde","Amarillo","Violeta")
+                ); 
+                
+            	return modelAndView(data, "hello_name.ftl");
             }
         });
     }
