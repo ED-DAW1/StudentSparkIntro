@@ -4,6 +4,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 import static spark.Spark.get;
+import static spark.Spark.post;
 
 public class App {
 
@@ -76,6 +77,46 @@ public class App {
             public Object handle(Request request, Response response) {
                 halt(401,"Go Away!!!");
                 return null;
+            }
+        });
+        
+        get(new Route("/favourite_fruit") {
+            @Override
+            public Object handle(Request request, Response response) {
+                String form = "	\n" +
+                    "\n" +
+                    "    <html>\n" +
+                    "      <head><title>Fruit Picker</title></head>\n" +
+                    "      <body>\n" +
+                    "         <form action=\"http://localhost:4567/favourite_fruit\" method=\"POST\">\n" +
+                    "            <p>What is your favorite fruit?</p>\n" +
+                    "              <p>\n" +
+                    "                 <input type=\"radio\" name=\"fruit\" value=\"Peras\">Peras</input>\n" +
+                    "              </p>    \n" +
+                    "              <p>\n" +
+                    "                 <input type=\"radio\" name=\"fruit\" value=\"Manzanas\">Manzanas</input>\n" +
+                    "              </p>    \n" +
+                    "              <p>\n" +
+                    "                 <input type=\"radio\" name=\"fruit\" value=\"Naranjas\">Naranjas</input>\n" +
+                    "              </p>    \n" +
+                    "              <p>\n" +
+                    "                 <input type=\"radio\" name=\"fruit\" value=\"Uvas\">Uvas</input>\n" +
+                    "              </p>            \n" +
+                    "            <input type=\"submit\" value=\"Submit\"/>\n" +
+                    "         </form>\n" +
+                    "      </body>\n" +
+                    "    </html>\n";
+                
+                return form;
+            }
+        });
+        
+        post(new Route("/favourite_fruit") {
+            @Override
+            public Object handle(Request request, Response response) {
+                String fruit = request.queryParams("fruit");
+                return String.format("<h1> Has elegido:  <em>%s</em> </h1>",
+                        fruit);
             }
         });
     }
